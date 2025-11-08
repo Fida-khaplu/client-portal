@@ -3,7 +3,8 @@ import supabase_client from "@/lib/client";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function GET() {    
   const { data, error } = await supabase_client.from("clients").select("*");  
@@ -29,7 +30,6 @@ export async function POST(req: Request) {
     }
 
     if (existingClient) {
-      // Email already exists
       return NextResponse.json({ message: "Client already exists" }, { status: 400 });
     }
 
@@ -54,11 +54,9 @@ export async function POST(req: Request) {
       console.log("Email sent:", emailResponse);
     } catch (resendError) {
       console.error("Resend error:", resendError);
-      // You can choose to continue or fail here
       return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
     }
 
-    // 4️⃣ Return success response
     return NextResponse.json({
       message: "Client added successfully",
       data: newClient,
@@ -68,3 +66,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
   }
 }
+
