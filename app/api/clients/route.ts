@@ -5,16 +5,12 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
 
-
-
-
 export async function GET() {    
   const { data, error } = await supabase_client.from("clients").select("*");  
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
   
 }
-
 
 export async function POST(req: Request) {
   try {
@@ -43,7 +39,7 @@ export async function POST(req: Request) {
       .select();
 
     if (insertError) {
-      console.error("Supabase insert error:", insertError);
+      console.error("got error while insert", insertError);
       return NextResponse.json({ error: insertError.message }, { status: 500 });
     }
 
