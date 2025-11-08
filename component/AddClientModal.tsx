@@ -24,7 +24,6 @@ export default function AddClientModal({ onClose, onAdded }: AddClientModalProps
       onClose();
     } catch (err) {
       console.error("Failed to add client:", err);
-      alert("Failed to add client");
     } finally {
       setLoading(false);
     }
