@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import AddClientModal from "@/component/AddClientModal";
+import Loading from "./loading";
 
 
 type Client = {
@@ -15,13 +16,25 @@ type Client = {
 export default function ClientsPage() {
   const [clients, setClients] = useState<Client[]>([]);
   const [showModal, setShowModal] = useState(false);
+   const [loading, setLoading] = useState(true); 
 
+  // const fetchClients = async () => {
+  //   try {
+  //     const res = await axios.get("/api/clients");
+  //     setClients(res.data || []);
+  //   } catch (err) {
+  //     console.error("Failed to fetch clients:", err);
+  //   }
+  // };
   const fetchClients = async () => {
     try {
+      setLoading(true);              
       const res = await axios.get("/api/clients");
       setClients(res.data || []);
     } catch (err) {
       console.error("Failed to fetch clients:", err);
+    } finally {
+      setLoading(false);        
     }
   };
 
@@ -43,7 +56,11 @@ export default function ClientsPage() {
           </button>
         </div>
         <div className="mt-8 w-full">
-          {clients.length === 0 ? (
+          {
+          loading ? (
+           <Loading/>
+          ) :
+          clients.length === 0 ? (
             <p className="text-gray-500 text-center py-4">No clients found.</p>
           ) : (
             <div className="w-full border border-gray-200 rounded-xl overflow-hidden shadow-sm">
